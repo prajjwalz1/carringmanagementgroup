@@ -170,7 +170,7 @@ class about_us(models.Model):
         cropped_image = image.crop((left, top, right, bottom))
 
         # Resize the cropped image to a desired size
-        desired_size = (350, 350)
+        desired_size = (1000, 1111)
         cropped_image.thumbnail(desired_size, Image.ANTIALIAS)
 
         # Optimize the image to reduce file size
