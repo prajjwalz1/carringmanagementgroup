@@ -143,6 +143,7 @@ from io import BytesIO
 class about_us(models.Model):
     image = models.ImageField(upload_to='carousel_images/', null=True)
     Company_name = models.CharField(max_length=100, null=True)
+    logo = models.ImageField(upload_to='logo', null=True)
     Title = models.CharField(max_length=100, null=True)
     years_of_experience = models.CharField(max_length=100, null=True)
     description = models.TextField(max_length=1000, null=True)
