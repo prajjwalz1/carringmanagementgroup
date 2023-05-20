@@ -3,14 +3,18 @@ from .models import Blog,Our_team,Feature,testimony,about_us,Slide,Service,Proje
 # Create your views here.
 def home(request):
   slide=Slide.objects.all()
+  try:
+    about = about_us.objects.get(logo__isnull=False)
+    logo = about.logo
+  except about_us.DoesNotExist:
+    logo = None
   about=about_us.objects.all()
   services=Service.objects.all()
   team=Our_team.objects.all()
   testimonies=testimony.objects.all()
-  projects=Project.objects.all()
-  Blogs=Blog.objects.all()
-  package=Package.objects.all()
-  Context={'slides':slide,'about':about,'services':services,'team':team,'testimonies':testimonies,'projects':projects,'blogs':Blogs,'package':package
+
+
+  Context={'slides':slide,'about':about,'services':services,'team':team,'testimonies':testimonies,'logo':logo
 
   }
   return render(request,'index.html',Context)
@@ -38,34 +42,55 @@ def make_appointment(request):
   # messages.success(request, 'appointment fixed')
 
 def about(request):
+  try:
+    about = about_us.objects.get(logo__isnull=False)
+    logo = about.logo
+  except about_us.DoesNotExist:
+    logo = None
+  slide = Slide.objects.get(id=2)
   abouts=about_us.objects.all()
   team = Our_team.objects.all()
   testimonies = testimony.objects.all()
   services=Service.objects.all()
   Context={
-    'about':abouts,'team':team,'testimonies':testimonies,'services':services
+    'about':abouts,'team':team,'testimonies':testimonies,'services':services,'slides':slide,'logo':logo
   }
   return render(request,'about.html',Context)
 
 def service_view(request):
+  try:
+    about =about_us.objects.get(logo__isnull=False)
+    logo = about.logo
+  except about_us.DoesNotExist:
+    logo = None
+
+  slide = Slide.objects.get(id=3)
   services = Service.objects.all()
   package = Package.objects.all()
   Context={
-    'services':services,'package':package
+    'services':services,'package':package,'slides':slide,'logo':logo
   }
   return render(request,'services.html',Context)
 
 
 def Portfolio_view(request):
+  try:
+    about = about_us.objects.get(logo__isnull=False)
+    logo = about.logo
+  except about_us.DoesNotExist:
+    logo = None
   projects=Project.objects.all()
+  slide = Slide.objects.get(id=3)
+
 
   Context={
-    'projects':projects
+    'projects':projects,'slides':slide,'logo':logo
   }
   return render(request,'portfolio.html',Context)
 
 def Package_view(request):
   package=Package.objects.all()
+
 
   Context={
     'package':package
@@ -73,19 +98,31 @@ def Package_view(request):
   return render(request,'pricing.html',Context)
 
 def blog_view(request):
+  try:
+    about = about_us.objects.get(logo__isnull=False)
+    logo = about.logo
+  except about_us.DoesNotExist:
+    logo = None
+  slide = Slide.objects.get(id=4)
   blogs=Blog.objects.all()
 
   Context={
-   'blogs':blogs
+   'blogs':blogs,'slides':slide,'logo':logo
   }
   return render(request,'blog.html',Context)
 
 def contact_view(request):
+  try:
+    about = about_us.objects.get(logo__isnull=False)
+    logo = about.logo
+  except about_us.DoesNotExist:
+    logo = None
   blogs=Blog.objects.all()
+  slide = Slide.objects.get(id=3)
 
 
   Context={
-   'blogs':blogs
+   'blogs':blogs,'slides':slide,'logo':logo
   }
   return render(request,'contact.html',Context)
 
@@ -109,7 +146,7 @@ def contact_form(request):
       'Contact Form Submission',
       f'Name: {name}\nEmail: {email}\nMessage: {message}',
       settings.DEFAULT_FROM_EMAIL,
-      [settings.DEFAULT_FROM_EMAIL,'consignsolution@gmail.com','bpn.dahal36@gmail.com'],
+      [settings.DEFAULT_FROM_EMAIL,'consignsolution@gmail.com','bpn.dahal36@gmail.com','sauravrauniyar111@gmail.com'],
       fail_silently=False,
     )
     messagesucces = "Message sent successfully"
