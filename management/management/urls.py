@@ -25,3 +25,6 @@ urlpatterns = [
     path('', include('app.urls')),
 
 ]
+admin.site.site_header = "welcome  Admin"
+admin.site.site_title = "Carring Management Group"
+admin.site.index_title = "Admin Carring Management Group"

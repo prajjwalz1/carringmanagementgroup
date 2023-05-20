@@ -13,5 +13,6 @@ urlpatterns = [
     path('blogs', views.blog_view, name='Blog_view'),
     path('contact', views.contact_view, name='contact_view'),
     path('contact_form', views.contact_form, name='contact_form'),
+    path('enquiry', views.enquiry, name='enquiry'),
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 

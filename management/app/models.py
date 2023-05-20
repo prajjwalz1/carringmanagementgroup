@@ -7,9 +7,39 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Service(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,null=True)
+    image=models.ImageField(upload_to='projects',null=True)
     flaticon_icon_class = models.CharField(max_length=50)
     description = models.TextField(max_length=1000)
+    def save(self, *args, **kwargs):
+        # Open the image using Pillow
+        image = Image.open(self.image)
+
+        # Get the dimensions of the original image
+        width, height = image.size
+
+        # Determine the desired size for cropping
+        crop_size = min(width, height)
+
+        # Calculate the coordinates for cropping the image
+        left = (width - crop_size) // 2
+        top = (height - crop_size) // 2
+        right = left + crop_size
+        bottom = top + crop_size
+
+        # Crop the image
+        cropped_image = image.crop((left, top, right, bottom))
+
+        # Resize the cropped image to a desired size
+        desired_size = (350, 350)
+        cropped_image.thumbnail(desired_size, Image.ANTIALIAS)
+
+        # Optimize the image to reduce file size
+        optimized_image = ImageOps.exif_transpose(cropped_image)
+        optimized_image.save(self.image.path, optimize=True)
+
+        # Save the rest of the model
+        super().save(*args, **kwargs)
 
     # Other fields for company information
 

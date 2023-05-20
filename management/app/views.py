@@ -109,10 +109,13 @@ def contact_form(request):
       'Contact Form Submission',
       f'Name: {name}\nEmail: {email}\nMessage: {message}',
       settings.DEFAULT_FROM_EMAIL,
-      [settings.DEFAULT_FROM_EMAIL,'consignsolution@gmail.com'],
+      [settings.DEFAULT_FROM_EMAIL,'consignsolution@gmail.com','bpn.dahal36@gmail.com'],
       fail_silently=False,
     )
     messagesucces = "Message sent successfully"
 
     return render(request,'contact.html',{'message':messagesucces })
   return render(request, 'contact.html')
+
+def enquiry(request):
+  return render(request,'enquiryform.html')
