@@ -300,7 +300,7 @@ import pandas as pd
 import io
 
 class FormSubmission(models.Model):
-    excel_file = models.FileField(upload_to='projects/form_submissions/')
+    excel_file = models.FileField(upload_to='form_submissions',max_length=265)
 
     @classmethod
     def create_from_dataframe(cls, df):
