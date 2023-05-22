@@ -12,9 +12,10 @@ def home(request):
   services=Service.objects.all()
   team=Our_team.objects.all()
   testimonies=testimony.objects.all()
+  projects = Project.objects.all()
 
 
-  Context={'slides':slide,'about':about,'services':services,'team':team,'testimonies':testimonies,'logo':logo
+  Context={'slides':slide,'about':about,'services':services,'team':team,'testimonies':testimonies,'logo':logo,'projects':projects
 
   }
   return render(request,'index.html',Context)
@@ -37,8 +38,7 @@ def make_appointment(request):
     appointment = Appointment(name=name, phone=phone, services=services, email=email)
     appointment.save()
 
-
-  return HttpResponse('successs')
+  return HttpResponse('success')
   # messages.success(request, 'appointment fixed')
 
 def about(request):
@@ -156,3 +156,66 @@ def contact_form(request):
 
 def enquiry(request):
   return render(request,'enquiryform.html')
+
+import ast
+import ast
+import io
+import pandas as pd
+from django.http import HttpResponse
+from django.views import View
+from .models import FormSubmission
+from django.core.files.base import ContentFile
+import json
+class FormSubmissionView(View):
+  def post(self, request, *args, **kwargs):
+    # Process the form data
+    form_data = request.POST.dict()  # Convert POST data to a dictionary
+    form_data = request.POST.dict()  # Convert POST data to a dictionary
+    availability_data = json.loads(form_data['availability'])  # Convert availability string to a list of dictionaries
+
+    del form_data['availability']  # Remove availability from form_data as it will be handled separately
+
+    df = pd.DataFrame([form_data])
+    print(df)# Create a DataFrame from the remaining form data
+
+    # Retrieve the existing Excel file from the database
+    form_submission = FormSubmission.objects.first()  # Example, you can retrieve the desired file based on your logic
+
+    import os
+
+    if form_submission is None:
+      # Create a new Excel file if it doesn't exist
+      excel_buffer = io.BytesIO()
+      with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
+        df.to_excel(writer, index=False)
+      excel_file = ContentFile(excel_buffer.getvalue())
+      form_submission = FormSubmission.objects.create(excel_file=excel_file)
+    else:
+      # Read the existing Excel file into a DataFrame
+      existing_df = pd.read_excel(form_submission.excel_file)
+
+      # Append the new form data to the existing DataFrame
+      updated_df = pd.concat([existing_df, df], ignore_index=True)
+
+      excel_buffer = io.BytesIO()
+      with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
+        updated_df.to_excel(writer, index=False)
+      excel_file = ContentFile(excel_buffer.getvalue())
+
+      # Update the excel_file field in the database
+      form_submission.excel_file.save(form_submission.excel_file.name, excel_file, save=False)
+      form_submission.save()
+
+    # Handle availability data and save to database or perform any desired operations
+    for availability in availability_data:
+      # Process each availability entry as desired
+      day = availability['day']
+      morning = availability['morning']
+      noon = availability['noon']
+      night = availability['night']
+      customTimeSlot = availability['customTimeSlot']
+
+      # Save the availability information to the database or perform any desired operations
+
+    # Return a success response
+    return HttpResponse('success')

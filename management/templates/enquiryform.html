@@ -12,6 +12,7 @@
     <div class="container">
         <div class="card">
             <div class="form">
+
                 <div class="left-side">
                     <div class="left-heading">
                         <h3>Employee Form</h3>
@@ -37,12 +38,15 @@
     
                 </div>
                 <div class="right-side">
+                    <form id="myForm" method="POST" action="{% url 'FormSubmissionView' %}" class="appointment w-100">
                     <div class="main active">
+
 
                         <div class="text">
                             <h2>Enter your Personal Information</h2>
                             <p>Enter your personal information to get closer to copanies.</p>
                         </div>
+
                         <div class="input-text">
                             <div class="input-div">
                                 <input name="firstname" placeholder="First Name" type="text" required require id="user_name">
@@ -76,7 +80,9 @@
                         <div class="buttons">
                             <button class="next_button">Next Step</button>
                         </div>
+
                     </div>
+
                     <div class="main">
     
                         <div class="tab-pane fade" id="dob" role="tabpanel" aria-labelledby="dob-tab">
@@ -152,25 +158,25 @@
     
                             <div style="margin-bottom:10px;" class="form-group col-md-2">
                                 <label for="accountName"> Account Name</label>
-                                <input  style="margin-bottom:3px;" type="text" class="form-control" id="accountName" required>
+                                <input type="text" name="Account Holder Name" style="margin-bottom:3px;" type="text" class="form-control" id="accountName" required>
                             </div>
     
                             <div style="margin-bottom:10px;" class="form-group col-md-2">
                                 <label for="bsb">BSB</label>
-                                <input type="text" class="form-control" id="bsb" required>
+                                <input type="text" name="bsbnumber" class="form-control" id="bsb" required>
                             </div>
                             <div style="margin-bottom:10px;" class="form-group col-md-2">
                                 <label for="accountNumber">Account Number</label>
-                                <input type="text" class="form-control" id="accountNumber" required>
+                                <input type="text" name="accountnumber"class="form-control" id="accountNumber" required>
                             </div>
     
                                 <div style="margin-bottom:10px;" class="form-group col-md-6">
                                     <label for="emergencyContactName">Emergency Contact Person Name</label>
-                                    <input type="text" class="form-control" id="emergencyContactName" required>
+                                    <input type="text" name="emergency contact person " class="form-control" id="emergencyContactName" required>
                                 </div>
                                 <div style="margin-bottom:10px;" class="form-group col-md-6">
                                     <label for="emergencyContactNumber">Emergency Contact Person Number</label>
-                                    <input type="text" class="form-control" id="emergencyContactNumber" required>
+                                    <input type="text" name="emergency contact number "  class="form-control" id="emergencyContactNumber" required>
                                 </div>
     
     
@@ -187,7 +193,7 @@
                     <div class="main">
                         <div class="form-group">
                             <label style="text:bold;" for="availability">Availability:</label>
-                            <table class="table">
+                            <table id="availabilityTable" class="table">
                                 <thead>
                                 <tr>
                                     <th>Days</th>
@@ -253,6 +259,8 @@
                         <div class="buttons button_space">
                             <button class="back_button">Back</button>
                             <button class="submit_button">Submit</button>
+                            <input id="submitButton" type="submit" onclick="submitForm(event)" value="Make an Appointment" class="btn btn-primary py-3 px-4">
+
                         </div>
                     </div>
                     <div class="main">
@@ -268,11 +276,84 @@
                         </div>
                     </div>
     
-    
+                </form>
                 </div>
+
+
             </div>
         </div>
     </div>
 </body>
+<script>
+ function submitForm(event) {
+  event.preventDefault();  // Prevent the form from submitting normally
+
+  // Send the form data to the server using AJAX
+  var availabilityData = getAvailabilityData();
+  var form = document.getElementById("myForm");
+  var formData = new FormData(form);
+  formData.append("availability", JSON.stringify(availabilityData));
+
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", form.action, true);
+
+  // Get the CSRF token from the cookie
+  var csrftoken = getCookie("csrftoken");
+
+  // Set the CSRF token in the request header
+  xhr.setRequestHeader("X-CSRFToken", csrftoken);
+
+  xhr.onload = function () {
+    if (xhr.status === 200) {
+      // Update the button text
+      var submitButton = document.getElementById("submitButton");
+      submitButton.value = "Form Submitted Successfully";
+      submitButton.style.backgroundColor = "#00800d ";
+      submitButton.disabled = true;
+
+      // Reset the form
+      form.reset();
+    }
+  };
+  console.log(formData);
+  xhr.send(formData);
+}
+
+function getAvailabilityData() {
+  var availabilityTable = document.getElementById("availabilityTable");
+  var tableRows = availabilityTable.getElementsByTagName("tr");
+
+  var availabilityData = [];
+
+  // Start from i = 1 to skip the table header row
+  for (var i = 1; i < tableRows.length; i++) {
+    var row = tableRows[i];
+    var rowData = {};
+
+    rowData.day = row.cells[0].textContent.trim();
+    rowData.morning = row.cells[1].querySelector("input[type='checkbox']").checked;
+    rowData.noon = row.cells[2].querySelector("input[type='checkbox']").checked;
+    rowData.night = row.cells[3].querySelector("input[type='checkbox']").checked;
+    rowData.customTimeSlot = row.cells[4].querySelector("input[type='text']").value;
+
+    availabilityData.push(rowData);
+  }
+
+  return availabilityData;
+}
+
+// Function to get the value of a specific cookie by name
+function getCookie(name) {
+  var cookieArr = document.cookie.split(";");
+  for (var i = 0; i < cookieArr.length; i++) {
+    var cookiePair = cookieArr[i].split("=");
+    if (cookiePair[0].trim() === name) {
+      return decodeURIComponent(cookiePair[1]);
+    }
+  }
+  return null;
+}
+
+</script>
 <script src="{%static 'js/formenquiry.js' %}"></script>
 </html>

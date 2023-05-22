@@ -121,7 +121,7 @@ class Project(models.Model):
     project_name = models.CharField(max_length=100)
     image = models.ImageField(upload_to='projects')
     project_location = models.CharField(max_length=100)
-    project_challenges = models.TextField(max_length=100)
+    project_Description = models.TextField(max_length=100)
     project_cost = models.CharField(max_length=100)
 
     def __str__(self):
@@ -261,3 +261,64 @@ class Appointment(models.Model):
 
     def __str__(self):
         return self.name
+
+# class Availability(models.Model):
+#     day = models.CharField(max_length=20)
+#     morning = models.BooleanField(default=False)
+#     noon = models.BooleanField(default=False)
+#     night = models.BooleanField(default=False)
+#     custom_time_slot = models.CharField(max_length=100, blank=True)
+#
+# class FormSubmission(models.Model):
+#     firstname = models.CharField(max_length=50)
+#     lastname = models.CharField(max_length=50)
+#     contact = models.CharField(max_length=50)
+#     email = models.EmailField()
+#     country = models.CharField(max_length=50)
+#     city = models.CharField(max_length=50)
+#     birthdate = models.DateField(blank=True, null=True)
+#     passportnumber = models.CharField(max_length=50)
+#     TFN = models.CharField(max_length=50)
+#     policeChecks = models.CharField(max_length=10)
+#     wwcc = models.CharField(max_length=10)
+#     covidVaccination = models.CharField(max_length=20, choices=[("firstDose", "First Dose"), ("secondDose", "Second Dose")], blank=True)
+#     account_holder_name = models.CharField(max_length=50)
+#     bsbnumber = models.CharField(max_length=20)
+#     accountnumber = models.CharField(max_length=50)
+#     emergency_contact_person = models.CharField(max_length=50)
+#     emergency_contact_number = models.CharField(max_length=50)
+#     availability = models.ManyToManyField(Availability)
+#
+#     def __str__(self):
+#         return f"{self.firstname} {self.lastname}"
+
+from django.db import models
+from django.core.files.base import ContentFile
+import pandas as pd
+
+
+import io
+
+class FormSubmission(models.Model):
+    excel_file = models.FileField(upload_to='projects/form_submissions/')
+
+    @classmethod
+    def create_from_dataframe(cls, df):
+        excel_buffer = io.BytesIO()
+        with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
+            df.to_excel(writer, index=False)
+        excel_file = ContentFile(excel_buffer.getvalue())
+        form_submission = cls.objects.create(excel_file=excel_file)
+        return form_submission
+
+    def update_from_dataframe(self, df):
+        existing_df = pd.read_excel(self.excel_file)
+        updated_df = pd.concat([existing_df, df], ignore_index=True)
+
+        excel_buffer = io.BytesIO()
+        with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
+            updated_df.to_excel(writer, index=False)
+        updated_excel_file = ContentFile(excel_buffer.getvalue())
+
+        self.excel_file.save(self.excel_file.name, updated_excel_file, save=False)
+        self.save()

@@ -25,7 +25,7 @@
         <div class="row d-md-flex justify-content-center">
             <div class="col-md-12">
                 <div class="wrap-appointment bg-white d-md-flex pl-md-4 pb-5 pb-md-0">
-                    <form method="POST" action="{% url 'make_appointment' %}" class="appointment w-100">
+                    <form id="myForm" method="POST" action="{% url 'make_appointment' %}" class="appointment w-100">
                         {% csrf_token %}
                         <div class="row justify-content-center">
                             <div class="col-12 col-md d-flex align-items-center pt-4 pt-md-0">
@@ -48,7 +48,8 @@
                                     <div class="form-field">
                                         <div class="select-wrap">
                                             <div class="icon"><span class="fa fa-chevron-down"></span></div>
-                                            <select data-service="{{services.name}}" name="services" id="services" class="form-control">
+                                            <select data-service="{{services.name}}" name="services" id="services"
+                                                    class="form-control">
                                                 <option value="">Select Services</option>
                                                 {%for services in services%}
                                                 <option value="{{services.name}}">{{services.name}}</option>
@@ -68,11 +69,15 @@
                             </div>
                             <div class="col-12 col-md d-flex align-items-center align-items-stretch">
                                 <div class="form-group py-md-4 py-2 px-4 px-md-0 d-flex align-items-stretch bg-primary">
-                                    <input type="submit" value="Make an Appointment" class="btn btn-primary py-3 px-4">
+                                    <input id="submitButton" type="submit" onclick="submitForm(event)" value="Make an Appointment" class="btn btn-primary py-3 px-4">
                                 </div>
                             </div>
                         </div>
                     </form>
+                    <div id="popup" style="display: none;">
+                        Form submitted successfully!
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -154,35 +159,99 @@
     </div>
 </section>
 
-<section style="background-color: #0764c929;" class="ftco-section">
+<section class="ftco-section ftco-no-pb">
     <div class="container">
         <div class="row justify-content-center pb-5 mb-3">
-            <div class="col-md-7 heading-section text-center ftco-animate">
-                <span class="subheading">Services</span>
-                <h2>What we can do</h2>
+            <div class="col-md-12 heading-section  text-center ftco-animate">
+                <span class="subheading">Our Servives</span>
+                <h2>We Provide following services </h2>
             </div>
         </div>
         <div class="row">
-            {%for services in services%}
-            <div class="col-md-6 col-lg-4 services ftco-animate">
-                <div class="d-block d-flex">
-                    <div class="icon d-flex justify-content-center align-items-center">
-                        <span class="{{services.flaticon_icon_class}}"></span>
+            {%for projects in projects%}
+            <div class="col-md-6 col-lg-3 ftco-animate">
+                <div  class="work img d-flex align-items-center"
+                     style="background-image: url('{{projects.image.url}}'); margin-bottom: 0px;">
+                    <a href="{{projects.image.url}}"
+                       class="icon image-popup d-flex justify-content-center align-items-center">
+                        <span class="fa fa-expand"></span>
+                    </a>
+                    <div class="desc w-100 px-4 text-center pt-5 mt-5">
+                        <div class="text w-100 mb-3 mt-4">
+                            <h2><a href="work-single.html">{{projects.project_name}}</a></h2>
+                        </div>
                     </div>
-                    <div class="media-body pl-3">
-                        <h3 class="heading">{{services.name}}</h3>
-                        <p>{{services.description}} </p>
-                        <p><a id="{{services.id}}" href="#" class="btn-custom">Read more</a></p>
-                    </div>
+
                 </div>
+               <h2 style="text-align:center; margin-bottom:0.5rem; ">{{projects.project_name}}</h2>
+                <p style="text-align:center; margin-bottom:4.5rem; margin-top:0rem;">{{projects.project_Description}} </p>
             </div>
             {%endfor%}
+        </div>
+    </div>
+</section>
+<section class="ftco-section testimony-section ftco-bg-dark">
+    <div class="container">
+        <div class="row justify-content-center pb-5 mb-3">
+            <div class="col-md-7 heading-section heading-section-white text-center ftco-animate">
+                <span class="subheading">Testimonies</span>
+                <h2>Happy Customer</h2>
+            </div>
+        </div>
+        <div class="row ftco-animate">
+            <div class="col-md-12">
+                <div class="carousel-testimony owl-carousel ftco-owl">
 
+                    {%for testimonies in testimonies%}
+                    <div class="item">
+
+                        <div class="testimony-wrap py-4">
+                            <div class="icon d-flex align-items-center justify-content-center"><span
+                                    class="fa fa-quote-right"></span>
+                            </div>
+                            <div class="text">
+                                <div class="d-flex align-items-center mb-4">
+                                    {% autoescape off %}
+                                    <p class="mb-1">{{ testimonies.comments }}</p>
+                                    {% endautoescape %}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    {%endfor%}
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 
+<script>
+  function submitForm(event) {
+    event.preventDefault();  // Prevent the form from submitting normally
+
+    // Send the form data to the server using AJAX
+    var form = document.getElementById("myForm");
+    var formData = new FormData(form);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", form.action, true);
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        // Update the button text
+        var submitButton = document.getElementById("submitButton");
+        submitButton.value = "Form Submitted Successfully";
+        submitButton.style.backgroundColor = "#00800d ";
+        submitButton.disabled = true;
+
+        // Reset the form
+        form.reset();
+      }
+    };
+    xhr.send(formData);
+  }
+</script>
 </body>
 {%endblock%}
 

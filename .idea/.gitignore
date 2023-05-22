@@ -3,3 +3,4 @@
 /workspace.xml
 /cleaningvenv
 *.sqlite3
+/media
