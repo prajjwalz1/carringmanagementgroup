@@ -32,39 +32,28 @@
                                 <div class="form-group py-md-4 py-2 px-4 px-md-0">
                                     <label for="name">Name</label>
                                     <input name="name" id="name" type="text" class="form-control"
-                                           placeholder="Your Name">
+                                           placeholder="Your Name" required>
                                 </div>
                             </div>
                             <div class="col-12 col-md d-flex align-items-center">
                                 <div class="form-group py-md-4 py-2 px-4 px-md-0">
                                     <label for="phone">Phone number</label>
                                     <input name="phone" id="phone" type="text" class="form-control"
-                                           placeholder="Phone number">
+                                           placeholder="Phone number" required>
                                 </div>
                             </div>
                             <div class="col-12 col-md d-flex align-items-center">
                                 <div class="form-group py-md-4 py-2 px-4 px-md-0">
-                                    <label for="services">Select Services</label>
-                                    <div class="form-field">
-                                        <div class="select-wrap">
-                                            <div class="icon"><span class="fa fa-chevron-down"></span></div>
-                                            <select data-service="{{services.name}}" name="services" id="services"
-                                                    class="form-control">
-                                                <option value="">Select Services</option>
-                                                {%for services in services%}
-                                                <option value="{{services.name}}">{{services.name}}</option>
-                                                {%endfor%}
-                                            </select>
-
-                                        </div>
-                                    </div>
+                                    <label for="services">service</label>
+                                    <input name="services" id="services" type="text" class="form-control"
+                                           placeholder="Service Name" required>
                                 </div>
                             </div>
                             <div class="col-12 col-md d-flex align-items-center pb-4 pb-md-0">
                                 <div class="form-group py-md-4 py-2 px-4 px-md-0">
                                     <label for="email">Email</label>
                                     <input name="email" id="email" type="text" class="form-control"
-                                           placeholder="Enter your Email">
+                                           placeholder="Enter your Email" required>
                                 </div>
                             </div>
                             <div class="col-12 col-md d-flex align-items-center align-items-stretch">
@@ -184,7 +173,7 @@
 
                 </div>
                <h2 style="text-align:center; margin-bottom:0.5rem; ">{{projects.project_name}}</h2>
-                <p style="text-align:center; margin-bottom:4.5rem; margin-top:0rem;">{{projects.project_Description}} </p>
+                <p style="text-align:center; margin-bottom:4.5rem; margin-top:0rem;">{{projects.project_Description|slice:":30"}} </p>
             </div>
             {%endfor%}
         </div>

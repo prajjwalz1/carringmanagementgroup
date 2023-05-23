@@ -10,15 +10,8 @@ admin.site.register(Slide)
 admin.site.register(Service)
 admin.site.register(Project)
 admin.site.register(Package)
-class FormSubmissionAdmin(admin.ModelAdmin):
-    list_display = ['id', 'display_excel_file']
+admin.site.register(FormSubmission)
 
-    def display_excel_file(self, obj):
-        return obj.excel_file.url if obj.excel_file else ''
-
-    display_excel_file.short_description = 'Excel File'
-
-admin.site.register(FormSubmission, FormSubmissionAdmin)
 
 @admin.register(Feature)
 class FeatureAdmin(admin.ModelAdmin):

@@ -114,7 +114,7 @@
                                     <input type="radio" id="policeChecksNo" name="policeChecks" value="no" required>
                                     <label for="policeChecksNo" class="form-check-label">No</label>
     
-                                    <input style="margin-bottom:15px;" type="text" class="form-control"
+                                    <input name="policeChecksnumber" style="margin-bottom:15px;" type="text" class="form-control"
                                            id="policeChecksIdNumber"
                                            placeholder="Check ID Number" required>
                                 </div>
@@ -126,7 +126,7 @@
                                     <input type="radio" id="wwccNo" name="wwcc" value="no" required>
                                     <label for="wwccNo" class="form-check-label">No</label>
     
-                                    <input style="margin-bottom:15px;" type="text" class="form-control" id="wwccIdNumber"
+                                    <input style="margin-bottom:15px;" type="text" class="form-control" name="wwccnumber" id="wwccIdNumber"
                                            placeholder="Check ID Number"
                                            required>
                                 </div>
@@ -134,12 +134,9 @@
                             <div class="form-group col-md-4">
                                 <label for="covidVaccination">Covid Vaccination</label>
                                 <div style="margin-bottom:15px;" class="form-check">
-                                    <input type="checkbox" id="firstDose" name="covidVaccination" value="firstDose">
-                                    <label for="firstDose" class="form-check-label">1st Dose</label>
-                                    <input type="checkbox" id="secondDose" name="covidVaccination" value="secondDose">
-                                    <label for="secondDose" class="form-check-label">2nd Dose</label>
-                                    <input type="checkbox" id="booster" name="covidVaccination" value="booster">
-                                    <label for="booster" class="form-check-label">Booster</label>
+                                    <input type="text" id="vaccination" placeholder="covid vaccine name" name="covidVaccination" >
+                                    <label  for="vaccination" class="form-control">Enter the vaccination name</label>
+
                                 </div>
                             </div>
                         </div>
@@ -158,25 +155,25 @@
     
                             <div style="margin-bottom:10px;" class="form-group col-md-2">
                                 <label for="accountName"> Account Name</label>
-                                <input type="text" name="Account Holder Name" style="margin-bottom:3px;" type="text" class="form-control" id="accountName" required>
+                                <input type="text" name="account_holder_name" style="margin-bottom:3px;" type="text" class="form-control" id="accountName" required>
                             </div>
     
                             <div style="margin-bottom:10px;" class="form-group col-md-2">
                                 <label for="bsb">BSB</label>
-                                <input type="text" name="bsbnumber" class="form-control" id="bsb" required>
+                                <input type="text" name="bsb_number" class="form-control" id="bsb" required>
                             </div>
                             <div style="margin-bottom:10px;" class="form-group col-md-2">
                                 <label for="accountNumber">Account Number</label>
-                                <input type="text" name="accountnumber"class="form-control" id="accountNumber" required>
+                                <input type="text" name="account_number"class="form-control" id="accountNumber" required>
                             </div>
     
                                 <div style="margin-bottom:10px;" class="form-group col-md-6">
                                     <label for="emergencyContactName">Emergency Contact Person Name</label>
-                                    <input type="text" name="emergency contact person " class="form-control" id="emergencyContactName" required>
+                                    <input type="text" name="emergency_contact_person" class="form-control" id="emergencyContactName" required>
                                 </div>
                                 <div style="margin-bottom:10px;" class="form-group col-md-6">
                                     <label for="emergencyContactNumber">Emergency Contact Person Number</label>
-                                    <input type="text" name="emergency contact number "  class="form-control" id="emergencyContactNumber" required>
+                                    <input type="text" name="emergency_contact_number"  class="form-control" id="emergencyContactNumber" required>
                                 </div>
     
     

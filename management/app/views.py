@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Blog,Our_team,Feature,testimony,about_us,Slide,Service,Project,Package
+from .models import Blog,Our_team,Feature,testimony,about_us,Slide,Service,Project,Package,FormSubmission,Availability
 # Create your views here.
 def home(request):
   slide=Slide.objects.all()
@@ -12,7 +12,7 @@ def home(request):
   services=Service.objects.all()
   team=Our_team.objects.all()
   testimonies=testimony.objects.all()
-  projects = Project.objects.all()
+  projects=Project.objects.all()
 
 
   Context={'slides':slide,'about':about,'services':services,'team':team,'testimonies':testimonies,'logo':logo,'projects':projects
@@ -157,65 +157,40 @@ def contact_form(request):
 def enquiry(request):
   return render(request,'enquiryform.html')
 
-import ast
-import ast
-import io
-import pandas as pd
-from django.http import HttpResponse
+
+from django.db import models
 from django.views import View
-from .models import FormSubmission
-from django.core.files.base import ContentFile
+from django.http import HttpResponse
 import json
+
+# from .models import FormSubmission,Availability
+
+
 class FormSubmissionView(View):
   def post(self, request, *args, **kwargs):
     # Process the form data
-    form_data = request.POST.dict()  # Convert POST data to a dictionary
-    form_data = request.POST.dict()  # Convert POST data to a dictionary
-    availability_data = json.loads(form_data['availability'])  # Convert availability string to a list of dictionaries
+    form_data = request.POST.dict()
+    availability_data = json.loads(form_data['availability'])
+    del form_data['availability']
+    print(form_data)
 
-    del form_data['availability']  # Remove availability from form_data as it will be handled separately
+    # Create a new FormSubmission instance
+    form_submission = FormSubmission.objects.create(**form_data)
 
-    df = pd.DataFrame([form_data])
-    print(df)# Create a DataFrame from the remaining form data
-
-    # Retrieve the existing Excel file from the database
-    form_submission = FormSubmission.objects.first()  # Example, you can retrieve the desired file based on your logic
-
-    import os
-
-    if form_submission is None:
-      # Create a new Excel file if it doesn't exist
-      excel_buffer = io.BytesIO()
-      with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
-        df.to_excel(writer, index=False)
-      excel_file = ContentFile(excel_buffer.getvalue())
-      form_submission = FormSubmission.objects.create(excel_file=excel_file)
-    else:
-      # Read the existing Excel file into a DataFrame
-      existing_df = pd.read_excel(form_submission.excel_file)
-
-      # Append the new form data to the existing DataFrame
-      updated_df = pd.concat([existing_df, df], ignore_index=True)
-
-      excel_buffer = io.BytesIO()
-      with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
-        updated_df.to_excel(writer, index=False)
-      excel_file = ContentFile(excel_buffer.getvalue())
-
-      # Update the excel_file field in the database
-      form_submission.excel_file.save(form_submission.excel_file.name, excel_file, save=False)
-      form_submission.save()
-
-    # Handle availability data and save to database or perform any desired operations
+    # Process and save the availability data
     for availability in availability_data:
-      # Process each availability entry as desired
-      day = availability['day']
-      morning = availability['morning']
-      noon = availability['noon']
-      night = availability['night']
-      customTimeSlot = availability['customTimeSlot']
-
-      # Save the availability information to the database or perform any desired operations
+      availability_obj = Availability.objects.create(
+        day=availability['day'],
+        morning=availability['morning'],
+        noon=availability['noon'],
+        night=availability['night'],
+        customTimeSlot=availability['customTimeSlot']
+      )
+      form_submission.availabilities.add(availability_obj)
 
     # Return a success response
     return HttpResponse('success')
+
+def form_submission_data(request):
+    form_submissions = FormSubmission.objects.all()
+    return render(request, 'vacancy_apply.html', {'form_submissions': form_submissions})
