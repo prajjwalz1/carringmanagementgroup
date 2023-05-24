@@ -89,7 +89,7 @@
                             <div style="font-size:12px;" class="form-group mb-4">
                                 <label for="birthdate">Date of Birth</label>
                                 <input name="birthdate" style="margin-bottom:15px;" type="text" class="form-control" id="birthdate"
-                                       placeholder="DD/MM/YYYY">
+                                       placeholder="YYYY-MM-DD">
                             </div>
                         </div>
                         <div style="font-size:12px;" class="tab-pane fade" id="additionalInfo" role="tabpanel"
@@ -135,7 +135,7 @@
                                 <label for="covidVaccination">Covid Vaccination</label>
                                 <div style="margin-bottom:15px;" class="form-check">
                                     <input type="text" id="vaccination" placeholder="covid vaccine name" name="covidVaccination" >
-                                    <label  for="vaccination" class="form-control">Enter the vaccination name</label>
+
 
                                 </div>
                             </div>
@@ -351,6 +351,31 @@ function getCookie(name) {
   return null;
 }
 
+
+  // Get the birthdate input element
+  var birthdateInput = document.getElementById('birthdate');
+
+  // Add an event listener to the input field for the 'blur' event
+  birthdateInput.addEventListener('blur', function() {
+    // Get the value entered in the birthdate input field
+    var birthdate = birthdateInput.value;
+
+    // Validate the birthdate using a regular expression pattern
+    var pattern = /^\d{4}-\d{2}-\d{2}$/;
+
+    // Check if the birthdate matches the pattern
+    if (!pattern.test(birthdate)) {
+      // Display an error message or perform any other validation action
+      alert('Please enter a valid birthdate in the format YYYY-MM-DD.');
+    }
+  });
 </script>
+
+
+
+
+
+
+
 <script src="{%static 'js/formenquiry.js' %}"></script>
 </html>

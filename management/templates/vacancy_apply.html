@@ -6,8 +6,9 @@
         <div class="row justify-content-center">
 <!-- form_submission.html -->
 <table class="table table-striped">
-  <thead>
+  <thead style="font-size: 10px; padding: 0.5px;">
     <tr>
+
       <th>First Name</th>
       <th>Last Name</th>
       <th>Contact</th>
@@ -25,7 +26,7 @@
       <th>Availability</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody style="font-size:14px; padding:0.1rem;">
     {% for submission in form_submissions %}
     <tr>
       <td>{{ submission.firstname }}</td>
@@ -68,9 +69,9 @@
                     {% for availability in submission.availabilities.all %}
                     <tr>
                       <td>{{ availability.day }}</td>
-                      <td>{{ availability.morning }}</td>
-                      <td>{{ availability.noon }}</td>
-                      <td>{{ availability.night }}</td>
+                      <td>{% if availability.morning == True %}<p style="color:green;">Available</p>{% else %}Unavailable{% endif %}</td>
+                      <td>{% if availability.noon == True %}<p style="color:green;">Available</p>{% else %}Unavailable{% endif %}</td>
+                        <td>{% if availability.night == True %}<p style="color:green;">Available</p>{% else %}Unavailable{% endif %}</td>
                       <td>{{ availability.customTimeSlot }}</td>
                     </tr>
                     {% endfor %}

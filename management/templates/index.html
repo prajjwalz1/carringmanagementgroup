@@ -157,7 +157,7 @@
             </div>
         </div>
         <div class="row">
-            {%for projects in projects%}
+            {%for projects in Services%}
             <div class="col-md-6 col-lg-3 ftco-animate">
                 <div  class="work img d-flex align-items-center"
                      style="background-image: url('{{projects.image.url}}'); margin-bottom: 0px;">
@@ -167,13 +167,14 @@
                     </a>
                     <div class="desc w-100 px-4 text-center pt-5 mt-5">
                         <div class="text w-100 mb-3 mt-4">
-                            <h2><a href="work-single.html">{{projects.project_name}}</a></h2>
+                           <h2><a href="{%url 'single_services' projects.id%}">{{ projects.project_name }}</a></h2>
+
                         </div>
                     </div>
 
                 </div>
                <h2 style="text-align:center; margin-bottom:0.5rem; ">{{projects.project_name}}</h2>
-                <p style="text-align:center; margin-bottom:4.5rem; margin-top:0rem;">{{projects.project_Description|slice:":30"}} </p>
+                <p style="text-align:center; margin-bottom:4.5rem; margin-top:0rem;">{{projects.project_Description|slice:":80"}} </p>
             </div>
             {%endfor%}
         </div>

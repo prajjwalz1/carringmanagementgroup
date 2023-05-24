@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Blog,Our_team,Feature,testimony,about_us,Slide,Service,Project,Package,FormSubmission,Availability
+from .models import Blog,Our_team,Feature,testimony,about_us,Slide,Service,Package,FormSubmission,Availability
 # Create your views here.
 def home(request):
   slide=Slide.objects.all()
@@ -9,13 +9,13 @@ def home(request):
   except about_us.DoesNotExist:
     logo = None
   about=about_us.objects.all()
-  services=Service.objects.all()
+
   team=Our_team.objects.all()
   testimonies=testimony.objects.all()
-  projects=Project.objects.all()
+  services=Service.objects.all()
 
 
-  Context={'slides':slide,'about':about,'services':services,'team':team,'testimonies':testimonies,'logo':logo,'projects':projects
+  Context={'slides':slide,'about':about,'services':services,'team':team,'testimonies':testimonies,'logo':logo,'Services':services
 
   }
   return render(request,'index.html',Context)
@@ -193,4 +193,13 @@ class FormSubmissionView(View):
 
 def form_submission_data(request):
     form_submissions = FormSubmission.objects.all()
+
     return render(request, 'vacancy_apply.html', {'form_submissions': form_submissions})
+
+
+def servicedetails(request,id):
+  services=Service.objects.get(id=id)
+  context={
+    'services':services
+  }
+  return render(request, 'servicedetails.html', context)
