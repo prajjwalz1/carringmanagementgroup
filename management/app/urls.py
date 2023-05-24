@@ -17,7 +17,7 @@ urlpatterns = [
     path('contact_form', views.contact_form, name='contact_form'),
     path('enquiry', views.enquiry, name='enquiry'),
     path('FormSubmissionView', FormSubmissionView.as_view(), name='FormSubmissionView'),
-    path('form-submissions/', views.form_submission_data, name='form_submissions'),
+    path('application/', views.form_submission_data, name='form_submissions'),
     path('single_services/<int:id>', views.servicedetails, name='single_services'),
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 
