@@ -8366,13 +8366,17 @@ h1, h2, h3, h4, h5,
   .btn:hover, .btn:active, .btn:focus {
     outline: none; }
   .btn.btn-primary {
-    background: #2b98f0;
-    border: 1px solid #2b98f0;
-    color: #fff; }
+    background: #5A9A17;
+    border: 1px solid #5A9A17;
+    color: #fff;
+    border-radius:15px;
+    box-size:50px;
+
+    }
     .btn.btn-primary:hover {
-      border: 1px solid #2b98f0;
+      border: 1px solid #F3E53D;
       background: transparent;
-      color: #2b98f0; }
+      color: #F3E53D; }
     .btn.btn-primary.btn-outline-primary {
       border: 1px solid #2b98f0;
       background: transparent;
@@ -9763,3 +9767,11 @@ textarea.form-control {
   100% {
     stroke-dasharray: 89, 200;
     stroke-dashoffset: -136px; } }
+
+.appointment_button{
+background:#2b98f0;
+content-align:center;
+border-color:red;
+
+
+}

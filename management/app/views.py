@@ -29,16 +29,20 @@ def recent_blogs(request):
 from .models import Appointment
 from django.http import HttpResponse
 
+
 def make_appointment(request):
   if request.method == 'POST':
     name = request.POST.get('name')
     phone = request.POST.get('phone')
     services = request.POST.get('services')
     email = request.POST.get('email')
+    print(name)
     appointment = Appointment(name=name, phone=phone, services=services, email=email)
     appointment.save()
 
-  return HttpResponse('success')
+    return HttpResponse('success')
+  else:
+    return HttpResponse('Invalid Request')
   # messages.success(request, 'appointment fixed')
 
 def about(request):

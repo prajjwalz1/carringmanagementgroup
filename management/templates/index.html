@@ -1,6 +1,9 @@
 {%extends 'base.html'%}
 {%block title%} <title>Home page</title>{%endblock%}
 {%block content%}
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.5.0/js/bootstrap.bundle.min.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <body>
 <!-- END nav -->
 <div class="hero-wrap js-fullheight" style="background-image: url('{{slides.0.image.url}}');"
@@ -44,7 +47,7 @@
                             </div>
                             <div class="col-12 col-md d-flex align-items-center">
                                 <div class="form-group py-md-4 py-2 px-4 px-md-0">
-                                    <label for="services">service</label>
+                                    <label for="services">Service</label>
                                     <input name="services" id="services" type="text" class="form-control"
                                            placeholder="Service Name" required>
                                 </div>
@@ -52,20 +55,41 @@
                             <div class="col-12 col-md d-flex align-items-center pb-4 pb-md-0">
                                 <div class="form-group py-md-4 py-2 px-4 px-md-0">
                                     <label for="email">Email</label>
-                                    <input name="email" id="email" type="text" class="form-control"
+                                    <input name="email" id="email" type="email" class="form-control"
                                            placeholder="Enter your Email" required>
                                 </div>
                             </div>
                             <div class="col-12 col-md d-flex align-items-center align-items-stretch">
                                 <div class="form-group py-md-4 py-2 px-4 px-md-0 d-flex align-items-stretch bg-primary">
-                                    <input id="submitButton" type="submit" onclick="submitForm(event)" value="Make an Appointment" class="btn btn-primary py-3 px-4">
+                                    <input style="background:#2b98f0;border-color:#fff;" id="submitButton" type="submit"
+                                           value="Make an Appointment" class="btn btn-primary py-3 px-4">
                                 </div>
                             </div>
                         </div>
+
+                        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="successModalLabel">Form Submitted Successfully!</h5>
+
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Your appointment has been successfully submitted.</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close
+                                        </button>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
                     </form>
-                    <div id="popup" style="display: none;">
-                        Form submitted successfully!
-                    </div>
+
 
                 </div>
             </div>
@@ -159,7 +183,7 @@
         <div class="row">
             {%for projects in Services%}
             <div class="col-md-6 col-lg-3 ftco-animate">
-                <div  class="work img d-flex align-items-center"
+                <div class="work img d-flex align-items-center"
                      style="background-image: url('{{projects.image.url}}'); margin-bottom: 0px;">
                     <a href="{{projects.image.url}}"
                        class="icon image-popup d-flex justify-content-center align-items-center">
@@ -167,14 +191,15 @@
                     </a>
                     <div class="desc w-100 px-4 text-center pt-5 mt-5">
                         <div class="text w-100 mb-3 mt-4">
-                           <h2><a href="{%url 'single_services' projects.id%}">{{ projects.project_name }}</a></h2>
+                            <h2><a href="{%url 'single_services' projects.id%}">{{ projects.project_name }}</a></h2>
 
                         </div>
                     </div>
 
                 </div>
-               <h2 style="text-align:center; margin-bottom:0.5rem; ">{{projects.project_name}}</h2>
-                <p style="text-align:center; margin-bottom:4.5rem; margin-top:0rem;">{{projects.project_Description|slice:":80"}} </p>
+                <h2 style="text-align:center; margin-bottom:0.5rem; ">{{projects.project_name}}</h2>
+                <p style="text-align:center; margin-bottom:4.5rem; margin-top:0rem;">
+                    {{projects.project_Description|slice:":80"}} </p>
             </div>
             {%endfor%}
         </div>
@@ -218,30 +243,86 @@
 
 
 <script>
-  function submitForm(event) {
-    event.preventDefault();  // Prevent the form from submitting normally
+  document.getElementById("myForm").addEventListener("submit", function(e) {
+    e.preventDefault(); // Prevent form submission
 
-    // Send the form data to the server using AJAX
-    var form = document.getElementById("myForm");
-    var formData = new FormData(form);
+    // Perform form validation
+    if (validateForm()) {
+      // Retrieve CSRF token from cookie
+      var csrftoken = getCookie('csrftoken');
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", form.action, true);
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        // Update the button text
-        var submitButton = document.getElementById("submitButton");
-        submitButton.value = "Form Submitted Successfully";
-        submitButton.style.backgroundColor = "#00800d ";
-        submitButton.disabled = true;
+      // Get the input field values
+      var name = document.getElementById("name").value;
+      var phone = document.getElementById("phone").value;
+      var services = document.getElementById("services").value;
+      var email = document.getElementById("email").value;
 
-        // Reset the form
-        form.reset();
-      }
-    };
-    xhr.send(formData);
+      // Construct the request payload
+      var payload = "name=" + encodeURIComponent(name) +
+                    "&phone=" + encodeURIComponent(phone) +
+                    "&services=" + encodeURIComponent(services) +
+                    "&email=" + encodeURIComponent(email);
+
+      // Submit the form
+      var form = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open(form.method, form.action, true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.setRequestHeader('X-CSRFToken', csrftoken); // Include CSRF token in headers
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+            if (xhr.responseText === 'success') {
+              // Display success modal
+              var successModal = new bootstrap.Modal(document.getElementById("successModal"));
+              successModal.show();
+
+              // Reset the form
+              form.reset();
+            } else {
+              // Handle other response cases
+            }
+          } else {
+            // Handle HTTP error cases
+          }
+        }
+      };
+      xhr.send(payload);
+    }
+  });
+
+  function validateForm() {
+    // Form validation code...
+
+    return true;
   }
+
+  // Function to retrieve CSRF token from cookie
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+
+  }
+function dismissModal() {
+    var successModal = document.getElementById('successModal');
+    var modalInstance = bootstrap.Modal.getInstance(successModal);
+    modalInstance.hide();
+  }
+
+
+
 </script>
+
 </body>
 {%endblock%}
 
