@@ -33,9 +33,11 @@
 
 {%block cssinternal%}
 {%endblock%}
-</style>
-{%block css%}
-{%endblock%}
+
+
+    </style>
+    {%block css%}
+    {%endblock%}
 </head>
 <body>
 <div class="wrap">
@@ -45,45 +47,69 @@
                 <p class="mb-0 phone"><span class="mailus">Phone no:</span> <a href="#">+61 482037001</a> or <span
                         class="mailus">email us:</span> <a href="#">info@carringmanagement.com.au</a></p>
             </div>
-<!--            <div class="col-12 col-md d-flex justify-content-md-end">-->
-<!--                <div class="social-media">-->
-<!--                    <p class="mb-0 d-flex">-->
-<!--                        <a href="#" class="d-flex align-items-center justify-content-center"><span-->
-<!--                                class="fa fa-facebook"><i class="sr-only">Facebook</i></span></a>-->
-<!--                        <a href="#" class="d-flex align-items-center justify-content-center"><span-->
-<!--                                class="fa fa-twitter"><i class="sr-only">Twitter</i></span></a>-->
-<!--                        <a href="#" class="d-flex align-items-center justify-content-center"><span-->
-<!--                                class="fa fa-instagram"><i class="sr-only">Instagram</i></span></a>-->
-<!--                        <a href="#" class="d-flex align-items-center justify-content-center"><span-->
-<!--                                class="fa fa-dribbble"><i class="sr-only">Dribbble</i></span></a>-->
-<!--                    </p>-->
-<!--                </div>-->
-<!--            </div>-->
+            <!--            <div class="col-12 col-md d-flex justify-content-md-end">-->
+            <!--                <div class="social-media">-->
+            <!--                    <p class="mb-0 d-flex">-->
+            <!--                        <a href="#" class="d-flex align-items-center justify-content-center"><span-->
+            <!--                                class="fa fa-facebook"><i class="sr-only">Facebook</i></span></a>-->
+            <!--                        <a href="#" class="d-flex align-items-center justify-content-center"><span-->
+            <!--                                class="fa fa-twitter"><i class="sr-only">Twitter</i></span></a>-->
+            <!--                        <a href="#" class="d-flex align-items-center justify-content-center"><span-->
+            <!--                                class="fa fa-instagram"><i class="sr-only">Instagram</i></span></a>-->
+            <!--                        <a href="#" class="d-flex align-items-center justify-content-center"><span-->
+            <!--                                class="fa fa-dribbble"><i class="sr-only">Dribbble</i></span></a>-->
+            <!--                    </p>-->
+            <!--                </div>-->
+            <!--            </div>-->
         </div>
     </div>
 </div>
 <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-    <div class="container">
-        <a class="navbar-brand" href="{%url 'home'%}"><span><img class="logo-img navbar-brand"  src="{{logo.url}}"></span></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
-                aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="fa fa-bars"></span> Menu
-        </button>
-        <div class="collapse navbar-collapse" id="ftco-nav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item {% if request.path == '/' %}active{% endif %}">
-                    <a href="{% url 'home' %}" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item {% if request.path == '/about' %}active{% endif %}"><a href="{%url 'about'%}" class="nav-link">About</a></li>
-                <li class="nav-item {% if request.path == '/services' %}active{% endif %}"><a href="{%url 'service_view'%}" class="nav-link">Services</a></li>
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <span><img class="logo-img navbar-brand" src="{{ logo.url }}"></span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#ftco-nav"
+      aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="fa fa-bars"></span> Menu
+    </button>
+    <div class="collapse navbar-collapse" id="ftco-nav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a href="{% url 'home' %}" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'about' %}" class="nav-link">About</a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'service_view' %}" class="nav-link">Services</a>
+        </li>
 
-                <li class="nav-item {% if request.path == '/enquiry' %}active{% endif %}"><a href="{%url 'enquiry'%}" class="nav-link">Career</a></li>
-                <li class="nav-item {% if request.path == '/blogs' %}active{% endif %}"><a href="{%url 'Blog_view'%}" class="nav-link">Blog</a></li>
-                <li class="nav-item {% if request.path == '/contact' %}active{% endif %}"><a href="{%url 'contact_view'%}" class="nav-link">Contact</a></li>
-            </ul>
-        </div>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Career
+          </a>
+          <ul class="dropdown-menu mt-0" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{% url 'enquiry' %}">Job Application</a></li>
+
+            <!-- Add more dropdown items as needed -->
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a href="{% url 'Blog_view' %}" class="nav-link">Blog</a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'contact_view' %}" class="nav-link">Contact</a>
+        </li>
+      </ul>
     </div>
+  </div>
 </nav>
+
+
+
 </body>
 
 
@@ -123,7 +149,7 @@
                         </li>
                         <li><a href="#"><span class="icon fa fa-phone"></span><span class="text">(+61) 482037001</span></a>
                         </li>
-                        <li><a href="#"><span class="icon fa fa-paper-plane"></span><span class="text">info@wiseccs.com.au</span></a>
+                        <li><a href="#"><span class="icon fa fa-paper-plane"></span><span class="text">info@carringmanagement.com.au</span></a>
                         </li>
                     </ul>
                 </div>
