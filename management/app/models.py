@@ -51,8 +51,7 @@ class Our_team(models.Model):
 
 
 class testimony(models.Model):
-    name = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='projects')
+    
     comments = models.TextField(max_length=1000)
 
     def save(self, *args, **kwargs):
