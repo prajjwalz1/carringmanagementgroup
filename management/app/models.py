@@ -152,22 +152,31 @@ class Slide(models.Model):
     def __str__(self):
         return self.image_title
 from django.core.exceptions import ValidationError
+from django.core.files.storage import default_storage
+import imghdr
+
+
 def validate_svg(value):
-    if value.file.content_type != 'image/svg+xml':
+    if value and hasattr(value.file, 'content_type') and value.file.content_type != 'image/svg+xml':
         raise ValidationError("Only SVG files are allowed.")
+
 
 class SVGField(models.FileField):
     def __init__(self, *args, **kwargs):
         kwargs['upload_to'] = 'logo'  # Set the upload directory as per your requirements
         super().__init__(*args, **kwargs)
 
-    def clean(self, *args, **kwargs):
-        data = super().clean(*args, **kwargs)
-        validate_svg(data)
-        return data
-import io
+    def clean(self, value, *args, **kwargs):
+        if value and hasattr(value, 'file') and not default_storage.exists(value.name):
+            # New file uploaded or existing file changed, perform validation
+            validate_svg(value)
+
+        return super().clean(value, *args, **kwargs)
+
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.db import models
+
 class about_us(models.Model):
     image = models.ImageField(upload_to='projects/carousel/', max_length=255, null=True)
     Company_name = models.CharField(max_length=100, null=True)
@@ -176,7 +185,6 @@ class about_us(models.Model):
     years_of_experience = models.CharField(max_length=100, null=True)
     description = models.TextField(max_length=1000, null=True)
     Total_projects = models.CharField(max_length=20, null=True)
-    image_thumbnail = models.ImageField(upload_to='projects/thumbnails/', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         # Open the original image using Pillow
