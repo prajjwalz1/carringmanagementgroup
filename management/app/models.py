@@ -51,26 +51,10 @@ class Our_team(models.Model):
 
 
 class testimony(models.Model):
-    
+
+    name=models.CharField(max_length=100,null=True)
     comments = models.TextField(max_length=1000)
 
-    def save(self, *args, **kwargs):
-        # Open the image using Pillow
-        image = Image.open(self.image)
-
-        # resize the image to the desired dimensions
-        image = image.resize((607, 607))
-
-        # Save the cropped image to a buffer
-        buffer = io.BytesIO()
-        image.save(buffer, 'JPEG')
-        buffer.seek(0)
-
-        # Save the buffer to the ImageField
-        self.image.save(self.image.name, buffer, save=False)
-
-        # Save the rest of the model
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name;
