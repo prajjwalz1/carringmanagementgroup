@@ -1,9 +1,11 @@
+
+
 {
     "version": 2,
     "builds": [
         {
             "src": "*.py",
-            "use": "@vercel/python"
+            "use": "@ardnt/vercel-python-wsgi",
         }
     ],
     "routes": [
