@@ -5,7 +5,7 @@
     "builds": [
         {
             "src": "*.py",
-            "use": "@ardnt/vercel-python-wsgi",
+            "use": "@ardnt/vercel-python-wsgi"
         }
     ],
     "routes": [
