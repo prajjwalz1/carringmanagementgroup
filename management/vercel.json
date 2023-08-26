@@ -2,8 +2,7 @@
     "builds": [{
         "src": "management/wsgi.py",
         "use": "@ardnt/vercel-python-wsgi",
-        "config": { "maxLambdaSize": "15mb" ,"runtime": "python3.9"},
-        "output": "/(.*)"
+        "config": { "maxLambdaSize": "15mb" ,"runtime": "python3.9"}
         
     }],
     "routes": [
